@@ -1,6 +1,10 @@
 module MessageHub
   class Provider
-    def fetch_messages!(opts = {}, &block)
+    def login(credentials = {})
+      raise NotImplementedError
+    end
+
+    def fetch_messages(opts = {}, &block)
       raise NotImplementedError
     end
 
