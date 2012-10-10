@@ -11,5 +11,10 @@ require 'message_hub/providers/twitter'
 require 'message_hub/providers/facebook'
 
 module MessageHub
+  def self.provider(name)
+    provider_klass = Object.module_eval("MessageHub::Providers::#{name.capitalize}")
+
+    provider_klass.new
+  end
 end
 

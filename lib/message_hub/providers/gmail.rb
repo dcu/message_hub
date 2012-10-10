@@ -21,15 +21,18 @@ module MessageHub
       def fetch_messages(opts = {}, &block)
         check_client_config
 
-        mailbox = @client.label("[Gmail]/All Mail")
-        mailbox.emails(opts).map do |email|
+        opts[:after] = opts.delete(:since) if opts.include?(:since)
+
+        mailbox = @client.label("INBOX")
+        mailbox.emails(:all, opts).map do |email|
           from = email.from[0]
 
           message_data = {
             :id => email.message_id,
             :source => 'email',
+            :thread => email.thread_id,
             :title => email.subject,
-            :body => extract_body(body),
+            :body => extract_body(email),
             :sender_name => "#{from.name || from.mailbox}",
             :sender => "#{from.mailbox}@#{from.host}"
           }
